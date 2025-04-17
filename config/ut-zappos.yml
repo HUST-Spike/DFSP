@@ -1,5 +1,5 @@
 model:
-  fusion: img2txt
+  # fusion: img2txt
   K: 1
   prompt_template: "a photo of x x"
   clip_model: "ViT-L/14"
@@ -11,17 +11,17 @@ model:
 
 train:
   dataset: ut-zappos
-  dataset_path: "../../../dataset/ut-zappos"
+  dataset_path: "data/ut-zappos"
   lr: 0.0005
   attr_dropout: 0.3
   weight_decay: 0.00001
   context_length: 8
-  train_batch_size: 128
+  # train_batch_size: 128
   gradient_accumulation_steps: 2
   seed: 2134
-  epochs: 20
+  epochs: 10
   epoch_start: 0
-  save_path: data/model/ut-zappos/dfsp
+  # save_path: data/model/ut-zappos/dfsp
   best_model_metric: best_loss     #best_unseen  best_seen AUC best_loss best_hm
   save_model: True
   load_model: False     # False or model path
@@ -29,9 +29,9 @@ train:
   sp_w: 0.1
 
 test:
-  eval_batch_size: 32
-  open_world: True
-  load_model: "/data/jyy/lll/project/CVPR2023/DFSP/data/model/ut-zappos/dfsp/txt2img_best.pt"
+  eval_batch_size: 64
+  # open_world: True
+  # load_model: "/data/jyy/lll/project/CVPR2023/DFSP/data/model/ut-zappos/dfsp/txt2img_best.pt"
   topk: 1
   text_encoder_batch_size: 36
   threshold: 0.4
