@@ -157,6 +157,23 @@ if __name__ == "__main__":
     load_args(YML_PATH[config.dataset], config)
     print(config)
 
+    # 模型保存路径
+    timestamp = datetime.datetime.now().strftime("%m%d_%H%M")
+    path_components = [
+        "train",
+        config.fusion,
+        config.dataset,
+        config.clip_model,
+        f"lr{config.lr}",
+        f"bs{config.batch_size}",
+        timestamp
+    ]
+    path_components = [comp for comp in path_components if comp]
+    model_dir_name = "_".join(path_components)
+    custom_save_dir = f"saved_models/{model_dir_name}"
+    config.save_path = custom_save_dir
+
+    # 声明logger
     logger = setup_logger(config, mode="train")
     logger.info("开始训练过程")
     logger.info(f"配置参数:\n{pprint.pformat(vars(config))}")
@@ -191,7 +208,7 @@ if __name__ == "__main__":
 
     model = DFSP(config, attributes=attributes, classes=classes, offset=offset).cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=config.lr, weight_decay=config.weight_decay)
-    logger.info(f"优化器: Adam，学习率: {config.lr}，权重衰减: {config.weight_decay}")
+    logger.info(f"优化器: Adam 学习率: {config.lr}，权重衰减: {config.weight_decay}")
 
     # if config.load_model is not False:
     #     model.load_state_dict(torch.load(config.load_model))
@@ -199,8 +216,15 @@ if __name__ == "__main__":
     os.makedirs(config.save_path, exist_ok=True)
     logger.info(f"模型将保存到: {config.save_path}")
 
+
     train_model(model, optimizer, config, train_dataset, val_dataset, test_dataset, logger)
 
+    # 更新最近模型保存路径， 便于test读取
+    os.makedirs("saved_models", exist_ok=True)
+    with open(f"saved_models/{config.dataset}_latest_model.txt", "w") as f: 
+        f.write(os.path.join(config.save_path, f"{config.fusion}_best.pt"))
+        logger.info(f"已更新最新模型路径记录")
+        
     with open(os.path.join(config.save_path, "config.pkl"), "wb") as fp:
         pickle.dump(config, fp)
     print("done!")
