@@ -69,6 +69,8 @@ def setup_logger(config, mode="train", extra_info=None):
         logging.info(f"批次大小: {config.train_batch_size}")
         logging.info(f"学习率: {config.lr}")
         logging.info(f"总训练轮次: {config.epochs}")
+    if mode == "test":
+        logging.info(f"开放世界/封闭世界: {'开放世界' if config.open_world else '封闭世界'}")
     logging.info(f"clip模型选择: {config.clip_model}")
     logging.info(pprint.pformat(vars(config)))
     
