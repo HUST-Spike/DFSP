@@ -25,6 +25,9 @@ cudnn.benchmark = True
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+# 导入logger
+from logger_utils import setup_logger, log_section
+
 
 class Evaluator:
     """
