@@ -533,12 +533,18 @@ if __name__ == "__main__":
     print("----")
     print(f"dataset: {config.dataset}")
 
+    # 设置日志记录器
+    logger = setup_logger(config, mode="test")
+    log_section("评估详情")
+    logger.info(f"数据集: {config.dataset}")
+
     # 自动加载最新模型
     latest_model_file = f"saved_models/{config.dataset}_latest_model.txt"
     if os.path.exists(latest_model_file):
         with open(latest_model_file, "r") as f:
                 config.load_model = f.read().strip()
         print(f"自动加载最新模型: {config.load_model}")
+        logger.info(f"自动加载最新模型: {config.load_model}")
     else:
         raise FileNotFoundError(f"未找到最新模型路径记录文件: {latest_model_file}，请使用--load_model参数指定模型路径")
     
@@ -549,12 +555,14 @@ if __name__ == "__main__":
     dataset_path = config.dataset_path
 
     print('loading validation dataset')
+    logger.info('加载验证数据集')
     val_dataset = CompositionDataset(dataset_path,
                                      phase='val',
                                      split='compositional-split-natural',
                                      open_world=config.open_world)
 
     print('loading test dataset')
+    logger.info('加载测试数据集')
     test_dataset = CompositionDataset(dataset_path,
                                       phase='test',
                                       split='compositional-split-natural',
@@ -570,6 +578,7 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load(config.load_model))
 
     print('evaluating on the validation set')
+    log_section('在验证集上评估')
     if config.open_world and config.threshold is None:
         evaluator = Evaluator(val_dataset, model=None)
         feasibility_path = os.path.join(
@@ -607,7 +616,9 @@ if __name__ == "__main__":
                     best_auc = auc
                     best_th = th
                     print('New best AUC', best_auc)
+                    logger.info(f'新的最佳AUC: {best_auc}')
                     print('Threshold', best_th)
+                    logger.info(f'阈值: {best_th}')
                     val_stats = copy.deepcopy(results)
     else:
         best_th = config.threshold
@@ -622,6 +633,7 @@ if __name__ == "__main__":
                 model, val_dataset, config)
             if config.open_world:
                 print('using threshold: ', best_th)
+                logger.info(f'使用阈值: {best_th}')
                 all_logits = threshold_with_feasibility(
                     all_logits, val_dataset.seen_mask, threshold=best_th, feasiblity=unseen_scores)
             results = test(
@@ -639,7 +651,13 @@ if __name__ == "__main__":
             result = result + key + "  " + str(round(val_stats[key], 4)) + "| "
         print(result)
 
+        # logger
+        log_section("验证集评估结果")
+        for key in val_stats:
+            logger.info(f"{key}: {round(val_stats[key], 4)}")
+
     print('evaluating on the test set')
+    log_section('在测试集上评估')
     with torch.no_grad():
         evaluator = Evaluator(test_dataset, model=None)
         all_logits, all_attr_gt, all_obj_gt, all_pair_gt, loss_avg = predict_logits(
@@ -666,6 +684,11 @@ if __name__ == "__main__":
             result = result + key + "  " + \
                 str(round(test_stats[key], 4)) + "| "
         print(result)
+        # logger
+        log_section("测试集评估结果")
+        for key in test_stats:
+            logger.info(f"{key}: {round(test_stats[key], 4)}")
+
 
     results = {
         'val': val_stats,
@@ -684,3 +707,4 @@ if __name__ == "__main__":
         json.dump(results, fp)
 
     print("done!")
+    log_section("评估完成")
