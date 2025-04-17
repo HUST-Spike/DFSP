@@ -17,7 +17,7 @@ parser.add_argument("--weight_decay", help="weight decay", type=float, default=1
 parser.add_argument("--clip_model", help="clip model type", type=str, default="ViT-L/14")
 parser.add_argument("--epochs", help="number of epochs", default=10, type=int)
 parser.add_argument("--epoch_start", help="start epoch", default=0, type=int)
-parser.add_argument("--train_batch_size", help="train batch size", default=48, type=int)
+parser.add_argument("--train_batch_size", help="train batch size", default=128, type=int)
 parser.add_argument("--eval_batch_size", help="eval batch size", default=16, type=int)
 parser.add_argument("--fusion", default="BiFusion", help="cross modal fusion method, choices = [BiFusion, txt2img, img2txt, OnlySPM]",)
 parser.add_argument("--context_length", help="sets the context length of the clip model", default=8, type=int)

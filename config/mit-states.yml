@@ -1,21 +1,21 @@
 model:
-  fusion: txt2img
+  # fusion: txt2img
   K: 1
   prompt_template: "a photo of x x"
-  clip_model: "ViT-L/14"
+  # clip_model: "ViT-L/14"
   res_w: 0.8
   SA_K: 1
   width_img: 1024
   width_txt: 768
 
 train:
-  dataset: mit-states
+  # dataset: mit-states#
   dataset_path: "data/mit-states"
   lr: 0.0001
   attr_dropout: 0.3
   weight_decay: 0.00001
   context_length: 8
-  train_batch_size: 128
+  # train_batch_size: 128
   gradient_accumulation_steps: 2
   seed: 0
   epochs: 10
@@ -29,7 +29,7 @@ train:
 
 test:
   eval_batch_size: 128
-  open_world: True
+  # open_world: True
   topk: 1
   text_encoder_batch_size: 36
   threshold: 0.4
