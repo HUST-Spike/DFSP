@@ -10,7 +10,7 @@ model:
 
 train:
   dataset: mit-states
-  dataset_path: "../../../dataset/mit-states"
+  dataset_path: "data/mit-states"
   lr: 0.0001
   attr_dropout: 0.3
   weight_decay: 0.00001
@@ -18,9 +18,10 @@ train:
   train_batch_size: 128
   gradient_accumulation_steps: 2
   seed: 0
-  epochs: 20
+  epochs: 10
   epoch_start: 0
-  save_path: data/model/mit-states/dfsp
+  # save_path: data/model/mit-states/dfsp
+  save_path: result/model/mit-states/dfsp
   load_model: False
   best_model_metric: best_unseen     #best_unseen  best_seen AUC best_loss best_hm
   att_obj_w: 0.01
