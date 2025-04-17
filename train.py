@@ -44,7 +44,7 @@ def train_model(model, optimizer, config, train_dataset, val_dataset, test_datas
                                 
     train_losses = []
 
-    log_section(logger, "训练初始化")
+    log_section("训练初始化")
     logger.info(f"开始训练，总共 {config.epochs} 轮")
 
     for i in range(config.epoch_start, config.epochs):
@@ -88,7 +88,7 @@ def train_model(model, optimizer, config, train_dataset, val_dataset, test_datas
             logger.info(f"模型保存至: {save_path}")
 
         print("Evaluating val dataset:")
-        log_section(logger, f"Epoch {i+1} 验证集评估")
+        log_section(f"Epoch {i+1} 验证集评估")
         logger.info("评估验证集...")
         loss_avg, val_result = evaluate(model, val_dataset, logger)
         print("Loss average on val dataset: {}".format(loss_avg))
@@ -165,7 +165,7 @@ if __name__ == "__main__":
         config.dataset,
         config.clip_model,
         f"lr{config.lr}",
-        f"bs{config.batch_size}",
+        f"bs{config.train_batch_size}",
         timestamp
     ]
     path_components = [comp for comp in path_components if comp]
