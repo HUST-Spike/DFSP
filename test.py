@@ -530,7 +530,19 @@ if __name__ == "__main__":
     print("----")
     print(f"dataset: {config.dataset}")
 
-
+    # 自动加载最新模型
+    latest_model_file = f"saved_models/{config.dataset}_latest_model.txt"
+    if os.path.exists(latest_model_file):
+        with open(latest_model_file, "r") as f:
+                config.load_model = f.read().strip()
+        print(f"自动加载最新模型: {config.load_model}")
+    else:
+        raise FileNotFoundError(f"未找到最新模型路径记录文件: {latest_model_file}，请使用--load_model参数指定模型路径")
+    
+    # 检查模型文件是否存在
+    if not os.path.exists(config.load_model):
+        raise FileNotFoundError(f"模型文件不存在: {config.load_model}")
+    
     dataset_path = config.dataset_path
 
     print('loading validation dataset')
