@@ -22,7 +22,7 @@ train:
   # epochs: 10
   epoch_start: 0
   # save_path: data/model/ut-zappos/dfsp
-  best_model_metric: best_loss     #best_unseen  best_seen AUC best_loss best_hm
+  best_model_metric: best_hm     #best_unseen  best_seen AUC best_loss best_hm
   save_model: True
   load_model: False     # False or model path
   att_obj_w: 0.01
