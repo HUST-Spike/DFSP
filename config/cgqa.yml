@@ -18,7 +18,7 @@ train:
   # train_batch_size: 256
   gradient_accumulation_steps: 1
   seed: 0
-  epochs: 10
+  # epochs: 10
   epoch_start: 0
   # save_path: data/model/cgqa/dfsp
   best_model_metric: best_loss     #best_unseen  best_seen AUC best_loss best_hm

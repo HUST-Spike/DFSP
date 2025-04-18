@@ -19,7 +19,7 @@ train:
   # train_batch_size: 128
   gradient_accumulation_steps: 2
   seed: 2134
-  epochs: 10
+  # epochs: 10
   epoch_start: 0
   # save_path: data/model/ut-zappos/dfsp
   best_model_metric: best_loss     #best_unseen  best_seen AUC best_loss best_hm
