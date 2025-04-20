@@ -539,14 +539,17 @@ if __name__ == "__main__":
     logger.info(f"数据集: {config.dataset}")
 
     # 自动加载最新模型
-    latest_model_file = f"saved_models/{config.dataset}_latest_model.txt"
-    if os.path.exists(latest_model_file):
-        with open(latest_model_file, "r") as f:
-                config.load_model = f.read().strip()
-        print(f"自动加载最新模型: {config.load_model}")
-        logger.info(f"自动加载最新模型: {config.load_model}")
+    if not config.load_model:
+        latest_model_file = f"saved_models/{config.dataset}_latest_model.txt"
+        if os.path.exists(latest_model_file):
+            with open(latest_model_file, "r") as f:
+                    config.load_model = f.read().strip()
+            print(f"自动加载最新模型: {config.load_model}")
+            logger.info(f"自动加载最新模型: {config.load_model}")
+        else:
+            raise FileNotFoundError(f"未找到最新模型路径记录文件: {latest_model_file}，请使用--load_model参数指定模型路径")
     else:
-        raise FileNotFoundError(f"未找到最新模型路径记录文件: {latest_model_file}，请使用--load_model参数指定模型路径")
+        print(f"使用指定的模型路径: {config.load_model}")
     
     # 检查模型文件是否存在
     if not os.path.exists(config.load_model):
